@@ -1,4 +1,4 @@
-import { Room } from '@/mahjong/model/room';
+import { Room } from './Room';
 
 export type RoomListType = Array<Pick<Room, 'uid' | 'name'>>;
 

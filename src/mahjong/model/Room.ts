@@ -1,5 +1,5 @@
-import { Player, PlayerInfoWithoutRoom } from './player';
-import { RoomManager } from '@/mahjong/model/roomManager';
+import { Player, PlayerInfoWithoutRoom } from './Player';
+import { RoomManager } from './RoomManager';
 export type RoomInfo = Pick<Room, 'uid' | 'name'> & {
   playerList: Array<PlayerInfoWithoutRoom>;
 };

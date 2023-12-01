@@ -9,7 +9,7 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { PlayerManager } from './model/PlayerManager';
-import { RoomManager } from './model/roomManager';
+import { RoomManager } from './model/RoomManager';
 import { Socket } from 'socket.io';
 import { ClientEventType, ServerEventType } from './websocket.interface';
 

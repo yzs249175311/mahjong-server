@@ -1,8 +1,8 @@
 import { Socket } from 'socket.io';
-import { Room, RoomInfo } from './room';
+import { Room, RoomInfo } from './Room';
 import { mock } from 'mockjs';
 import { ClientEventType } from '../websocket.interface';
-import { RoomListType } from '@/mahjong/model/roomManager';
+import { RoomListType } from './RoomManager';
 
 export type PlayerInfo = PlayerInfoWithoutRoom & {
   currentRoom: null | RoomInfo;
