@@ -1,0 +1,13 @@
+export enum ServerEventType {
+  JOINROOM = 'JOINROOM',
+  LEAVEROOM = 'LEAVEROOM',
+  ROOMLIST = 'ROOMLIST',
+  SETMONEY = 'SETMONEY',
+  SETNAME = 'SETNAME',
+}
+export enum ClientEventType {
+  MESSAGE = 'MESSAGE',
+  ROOMLIST = 'ROOMLIST',
+  SET_UID = 'SET_UID',
+  PLAYERINFO = 'PLAYERINFO',
+}
