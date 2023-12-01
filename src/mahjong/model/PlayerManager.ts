@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { Player } from './player';
+import { Player } from '@/mahjong/model/player';
 
 export class PlayerManager {
   playerMap = new Map<string, Player>();

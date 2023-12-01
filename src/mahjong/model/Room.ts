@@ -1,6 +1,6 @@
-import { Player, PlayerInfoWithoutRoom } from "./player";
-import { RoomManager } from "./roomManager";
-export type RoomInfo = Pick<Room, "uid" | "name"> & {
+import { Player, PlayerInfoWithoutRoom } from './player';
+import { RoomManager } from '@/mahjong/model/roomManager';
+export type RoomInfo = Pick<Room, 'uid' | 'name'> & {
   playerList: Array<PlayerInfoWithoutRoom>;
 };
 
@@ -33,8 +33,8 @@ export class Room {
     }
   }
 
-  getPlayerList(): RoomInfo["playerList"] {
-    let playerList: RoomInfo["playerList"] = [];
+  getPlayerList(): RoomInfo['playerList'] {
+    let playerList: RoomInfo['playerList'] = [];
 
     this.playerSet.forEach((player) => {
       playerList.push(player.getInfoWithoutRoom());
