@@ -34,6 +34,7 @@ jobs:
           SCRIPT_BEFORE: |
             pm2 stop mahjong
             pm2 delete mahjong
+            rm -rf /var/projects/mahjong
           SCRIPT_AFTER: |
             cd /var/projects/mahjong
             npm ci
