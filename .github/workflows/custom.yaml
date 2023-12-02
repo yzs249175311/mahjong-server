@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '18'
       # - name: Install npm dependencies
-      #   run: npm ci
+      #   run: npm install
       # - name: Run build task
       #   run: npm run build
       - name: Deploy to Server
@@ -37,6 +37,6 @@ jobs:
             rm -rf /var/projects/mahjong
           SCRIPT_AFTER: |
             cd /var/projects/mahjong
-            npm ci
+            npm install
             npm run build
             pm2 start --name mahjong /var/projects/mahjong/dist/main.js
