@@ -4,7 +4,9 @@ export enum ServerEventType {
   ROOMLIST = 'ROOMLIST',
   SETMONEY = 'SETMONEY',
   SETNAME = 'SETNAME',
+  CREATE_ROOM = 'CREATE_ROOM'
 }
+
 export enum ClientEventType {
   MESSAGE = 'MESSAGE',
   ROOMLIST = 'ROOMLIST',

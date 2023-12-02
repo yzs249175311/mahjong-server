@@ -1,18 +1,27 @@
-import { Room } from './Room';
+import { Room, RoomInfo, RoomType } from './Room';
+const { Random } = require('mockjs');
 
-export type RoomListType = Array<Pick<Room, 'uid' | 'name'>>;
+export type RoomListType = Array<Pick<RoomInfo, 'uid' | 'name' | 'roomType'>>;
 
 export class RoomManager {
   roomMap = new Map<string, Room>();
 
-  constructor() {
-    this.createRoom('1', '公共房间1');
-    this.createRoom('2', '公共房间2');
-  }
+  constructor() {}
 
-  createRoom(uid: string, name: string) {
-    let room = new Room(uid, name, this);
+  createRoom(
+    name: string,
+    roomType: RoomType = { type: 'public', password: null },
+  ): false | Room {
+    if (this.roomMap.size >= 100) {
+      return false;
+    }
+    let uid = Random.guid();
+    if (this.roomMap.has(uid)) {
+      return false;
+    }
+    let room = new Room(uid, name, roomType, this);
     this.roomMap.set(uid, room);
+    return room;
   }
 
   getRoom(uid: string): Room | undefined {
@@ -33,6 +42,10 @@ export class RoomManager {
       roomList.push({
         uid: room.uid,
         name: room.name,
+        roomType: {
+          type: room.roomType.type,
+          password: room.hasPassword(),
+        },
       });
     });
     return roomList;

@@ -41,13 +41,15 @@ export class Player {
     }
   }
 
-  joinRoom(room: Room) {
+  joinRoom(room: Room, password?: string, force: boolean = false) {
+    this.leaveRoom();
+
     if (room) {
-      this.leaveRoom();
-      this.currentRoom = room;
-      this.client.join(room.uid);
-      room.addPlayer(this);
-      this.notifyRoomPlayer();
+      if (force) {
+        room.addPlayer(this);
+      } else {
+        room.validPlayerBeforeJoin(this, password);
+      }
     }
   }
 

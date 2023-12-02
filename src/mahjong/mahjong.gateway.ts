@@ -12,6 +12,7 @@ import { PlayerManager } from './model/PlayerManager';
 import { RoomManager } from './model/RoomManager';
 import { Socket } from 'socket.io';
 import { ClientEventType, ServerEventType } from './websocket.interface';
+import { Room, RoomType } from './model/Room';
 
 @WebSocketGateway(3001, {
   cors: { origin: '*' },
@@ -29,8 +30,14 @@ export class MahjongGateway
   constructor() {
     this.playerManager = new PlayerManager();
     this.roomManager = new RoomManager();
-    this.roomManager.createRoom('1', '公共房间1');
-    this.roomManager.createRoom('2', '公共房间2');
+    this.roomManager.createRoom('公共房间1', {
+      type: 'always',
+      password: null,
+    });
+    this.roomManager.createRoom('密码房间2', {
+      type: 'always',
+      password: '123456',
+    });
   }
 
   handleConnection(@ConnectedSocket() socket: Socket) {
@@ -50,18 +57,20 @@ export class MahjongGateway
   // 监听：获取房间列表
   @SubscribeMessage(ServerEventType.ROOMLIST)
   onRoomList(@ConnectedSocket() socket: Socket) {
-    socket.emit(ClientEventType.ROOMLIST, this.roomManager.getRoomList());
+    this.playerManager
+      .getPlayer(socket)
+      .sendRoomList(this.roomManager.getRoomList());
   }
 
   //监听： 进入房间
   @SubscribeMessage(ServerEventType.JOINROOM)
   onJoinRoom(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() payload: string,
+    @MessageBody() payload: { uid: string; password?: string },
   ) {
     this.playerManager
       .getPlayer(socket)
-      ?.joinRoom(this.roomManager.getRoom(payload));
+      ?.joinRoom(this.roomManager.getRoom(payload.uid), payload.password);
   }
 
   //监听： 离开房间
@@ -70,6 +79,7 @@ export class MahjongGateway
     this.playerManager.getPlayer(socket)?.leaveRoom();
   }
 
+  // 监听：设置金币
   @SubscribeMessage(ServerEventType.SETMONEY)
   onSetMoney(
     @ConnectedSocket() socket: Socket,
@@ -78,8 +88,26 @@ export class MahjongGateway
     this.playerManager.getPlayer(socket)?.setMoney(payload);
   }
 
+  // 监听：设置名字
   @SubscribeMessage(ServerEventType.SETNAME)
   onSetName(@ConnectedSocket() socket: Socket, @MessageBody() payload: string) {
     this.playerManager.getPlayer(socket)?.setName(payload);
+  }
+
+  // 监听：创建房间
+  @SubscribeMessage(ServerEventType.CREATE_ROOM)
+  onCreatRoom(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody()
+    payload: {
+      uid: Room['uid'];
+      name: Room['name'];
+      roomType: RoomType;
+    },
+  ) {
+    let room = this.roomManager.createRoom(payload.name, payload.roomType);
+    if (room) {
+      this.playerManager.getPlayer(socket)?.joinRoom(room, null, true);
+    }
   }
 }
