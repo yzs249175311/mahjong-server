@@ -36,6 +36,7 @@ jobs:
             pm2 delete mahjong
             rm -rf /var/projects/mahjong
           SCRIPT_AFTER: |
+            source /etc/profile
             cd /var/projects/mahjong
             npm install
             npm run build
