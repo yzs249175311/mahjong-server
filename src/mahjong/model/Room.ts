@@ -82,6 +82,12 @@ export class Room {
   validPlayerBeforeJoin(player: Player, password?: string) {
     if (roomTypeValidator[this.roomType.type](this, password)) {
       this.addPlayer(player);
+    } else {
+      player.sendMessage({
+        type: 'system',
+        severity: 'error',
+        message: '密码错误',
+      });
     }
   }
 

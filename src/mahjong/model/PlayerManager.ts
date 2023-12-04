@@ -22,6 +22,12 @@ export class PlayerManager {
 
     console.log('client:' + Reflect.get(client, 'uid'));
 
+    player.sendMessage({
+      type: 'system',
+      severity: 'success',
+      message: '登录成功',
+    });
+
     return player;
   }
 

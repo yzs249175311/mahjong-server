@@ -3,6 +3,7 @@ import { Room, RoomInfo } from './Room';
 import { mock } from 'mockjs';
 import { ClientEventType } from '../websocket.interface';
 import { RoomListType } from './RoomManager';
+import { Message } from './Message';
 
 export type PlayerInfo = PlayerInfoWithoutRoom & {
   currentRoom: null | RoomInfo;
@@ -70,6 +71,10 @@ export class Player {
 
   sendRoomList(roomList: RoomListType) {
     this.client.emit(ClientEventType.ROOMLIST, roomList);
+  }
+
+  sendMessage(message: Message) {
+    this.client.emit(ClientEventType.MESSAGE, message);
   }
 
   sendPlayerInfo() {

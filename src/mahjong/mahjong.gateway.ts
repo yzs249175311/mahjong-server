@@ -10,7 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { PlayerManager } from './model/PlayerManager';
 import { RoomManager } from './model/RoomManager';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { ClientEventType, ServerEventType } from './websocket.interface';
 import { Room, RoomType } from './model/Room';
 
@@ -22,7 +22,7 @@ export class MahjongGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
-  server;
+  server: Server;
 
   playerManager: PlayerManager;
   roomManager: RoomManager;
