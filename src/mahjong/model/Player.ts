@@ -54,6 +54,52 @@ export class Player {
     }
   }
 
+  payMoney(player: Player, money: number) {
+    if (this.money < money) {
+      this.sendMessage({
+        severity: 'error',
+        type: 'system',
+        message: '金额不足',
+      });
+      return;
+    }
+
+    this.money -= money;
+    player.getMoney(this, money);
+    this.sendMessage({
+      type: 'pay',
+      severity: 'success',
+      from: {
+        uid: this.uid,
+        name: this.name,
+      },
+      to: {
+        uid: player.uid,
+        name: player.name,
+      },
+      message: money + '',
+    });
+
+    this.notifyRoomPlayer();
+  }
+
+  getMoney(player: Player, money: number) {
+    this.money += money;
+    this.sendMessage({
+      type: 'pay',
+      severity: 'info',
+      from: {
+        uid: player.uid,
+        name: player.name,
+      },
+      to: {
+        uid: this.uid,
+        name: this.name,
+      },
+      message: money + '',
+    });
+  }
+
   notifyRoomPlayer() {
     this.currentRoom?.sendPlayerInfo();
   }

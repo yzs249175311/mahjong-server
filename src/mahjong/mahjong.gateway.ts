@@ -13,6 +13,7 @@ import { RoomManager } from './model/RoomManager';
 import { Socket, Server } from 'socket.io';
 import { ClientEventType, ServerEventType } from './websocket.interface';
 import { Room, RoomType } from './model/Room';
+import { Player } from './model/Player';
 
 @WebSocketGateway(3001, {
   cors: { origin: '*' },
@@ -108,6 +109,28 @@ export class MahjongGateway
     let room = this.roomManager.createRoom(payload.name, payload.roomType);
     if (room) {
       this.playerManager.getPlayer(socket)?.joinRoom(room, null, true);
+    }
+  }
+
+  // 监听: 支付金钱
+  @SubscribeMessage(ServerEventType.PAY_MOENY)
+  onPayMoney(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() payload: { uid: Player['uid']; money: number },
+  ) {
+    console.log(payload);
+    if (
+      payload &&
+      payload.uid &&
+      payload.money &&
+      this.playerManager.hasPlayer(payload.uid) &&
+      this.playerManager.getPlayer(socket) !==
+        this.playerManager.getPlayer(payload.uid) &&
+      payload.money > 0
+    ) {
+      this.playerManager
+        .getPlayer(socket)
+        ?.payMoney(this.playerManager.getPlayer(payload.uid), payload.money);
     }
   }
 }

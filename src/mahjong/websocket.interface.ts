@@ -5,6 +5,7 @@ export enum ServerEventType {
   SETMONEY = 'SETMONEY',
   SETNAME = 'SETNAME',
   CREATE_ROOM = 'CREATE_ROOM',
+  PAY_MOENY = 'PAY_MOENY',
 }
 
 export enum ClientEventType {

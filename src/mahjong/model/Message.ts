@@ -1,3 +1,5 @@
+import { Player } from './Player';
+
 export type MessageSeverity = 'error' | 'warning' | 'info' | 'success';
 
 export type SystemMessage = {
@@ -9,8 +11,8 @@ export type SystemMessage = {
 export type PayMessage = {
   severity: MessageSeverity;
   type: 'pay';
-  from: string;
-  to: string;
+  from: Pick<Player, 'uid' | 'name'>;
+  to: Pick<Player, 'uid' | 'name'>;
   message: string;
 };
 
