@@ -141,9 +141,15 @@ export class MahjongGateway
     @ConnectedSocket() socket: Socket,
     @MessageBody() payload: string,
   ) {
+    let me = this.playerManager.getPlayer(socket);
     let player = this.playerManager.getPlayer(payload);
-    if (player) {
+    if (me && player) {
       player.leaveRoom();
+      player.sendMessage({
+        type: 'system',
+        severity: 'warning',
+        message: `你被${me.name}踢出房间!`,
+      });
     }
   }
 }
