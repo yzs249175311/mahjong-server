@@ -1,3 +1,4 @@
+import { Message } from './Message';
 import { Player, PlayerInfoWithoutRoom } from './Player';
 import { RoomManager } from './RoomManager';
 export type RoomInfo = Pick<Room, 'uid' | 'name'> & {
@@ -52,6 +53,7 @@ export class Room {
   roomType: RoomType;
   playerSet: Set<Player>;
   roomManager: RoomManager;
+  messageList: Message[];
 
   constructor(
     uid: string,

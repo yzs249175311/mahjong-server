@@ -16,4 +16,10 @@ export type PayMessage = {
   message: string;
 };
 
-export type Message = SystemMessage | PayMessage;
+export type LoginMessage = {
+  severity: MessageSeverity;
+  type: 'login';
+  message: string;
+};
+
+export type Message = SystemMessage | PayMessage | LoginMessage;

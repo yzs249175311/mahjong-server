@@ -7,6 +7,7 @@ import { Message } from './Message';
 
 export type PlayerInfo = PlayerInfoWithoutRoom & {
   currentRoom: null | RoomInfo;
+  messageList: Message[];
 };
 
 export type PlayerInfoWithoutRoom = Pick<Player, 'uid' | 'name' | 'money'>;
@@ -18,6 +19,7 @@ export class Player {
   name: string = mock('@cname');
   money: number = 0;
   currentRoom: null | Room = null;
+  messageList: Message[] = [];
 
   setMoney(money: number) {
     this.money = money;
@@ -66,7 +68,7 @@ export class Player {
 
     this.money -= money;
     player.getMoney(this, money);
-    this.sendMessage({
+    let message = this.sendMessage({
       type: 'pay',
       severity: 'success',
       from: {
@@ -120,6 +122,7 @@ export class Player {
   }
 
   sendMessage(message: Message) {
+    this.messageList.push(message);
     this.client.emit(ClientEventType.MESSAGE, message);
   }
 
@@ -131,6 +134,7 @@ export class Player {
     return {
       ...this.getInfoWithoutRoom(),
       currentRoom: this.currentRoom ? this.currentRoom.getInfo() : null,
+      messageList: this.messageList,
     };
   }
 
