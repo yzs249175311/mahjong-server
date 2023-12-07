@@ -13,12 +13,14 @@ import { RoomManager } from './model/RoomManager';
 import { Socket, Server } from 'socket.io';
 import { ClientEventType, ServerEventType } from './websocket.interface';
 import { Room, RoomType } from './model/Room';
+import { Injectable, UsePipes } from '@nestjs/common';
 import { Player } from './model/Player';
 
 @WebSocketGateway(3001, {
   cors: { origin: '*' },
   path: '/',
 })
+@Injectable()
 export class MahjongGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
@@ -131,6 +133,17 @@ export class MahjongGateway
       this.playerManager
         .getPlayer(socket)
         ?.payMoney(this.playerManager.getPlayer(payload.uid), payload.money);
+    }
+  }
+  // 监听： 踢人
+  @SubscribeMessage(ServerEventType.KICK_PLAYER)
+  onKickPlayer(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() payload: string,
+  ) {
+    let player = this.playerManager.getPlayer(payload);
+    if (player) {
+      player.leaveRoom();
     }
   }
 }
