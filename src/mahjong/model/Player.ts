@@ -10,12 +10,16 @@ export type PlayerInfo = PlayerInfoWithoutRoom & {
   messageList: Message[];
 };
 
-export type PlayerInfoWithoutRoom = Pick<Player, 'uid' | 'name' | 'money'>;
+export type PlayerInfoWithoutRoom = Pick<
+  Player,
+  'uid' | 'name' | 'money' | 'connected'
+>;
 
 export class Player {
   uid: string;
   client: Socket;
 
+  connected: boolean = false;
   name: string = mock('@cname');
   money: number = 0;
   currentRoom: null | Room = null;
@@ -148,6 +152,17 @@ export class Player {
       uid: this.uid,
       name: this.name,
       money: this.money,
+      connected: this.connected,
     };
+  }
+
+  connect() {
+    this.connected = true;
+    this.notifyRoomPlayer();
+  }
+
+  disconnect() {
+    this.connected = false;
+    this.notifyRoomPlayer();
   }
 }

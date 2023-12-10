@@ -52,10 +52,14 @@ export class MahjongGateway
       return;
     }
     let player = this.playerManager.create(uid, socket);
+    player.connect();
+    player.notifyRoomPlayer();
     player.sendPlayerInfo();
   }
 
-  handleDisconnect() {}
+  handleDisconnect(@ConnectedSocket() socket: Socket) {
+    this.playerManager.getPlayer(socket)?.disconnect();
+  }
 
   // 监听：获取房间列表
   @SubscribeMessage(ServerEventType.ROOMLIST)
