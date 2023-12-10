@@ -19,11 +19,16 @@ export class Player {
   name: string = mock('@cname');
   money: number = 0;
   currentRoom: null | Room = null;
+  lastLoginTime: number = Date.now();
   messageList: Message[] = [];
 
   setMoney(money: number) {
     this.money = money;
     this.notifyRoomPlayer();
+  }
+
+  setLoginTime(time: number) {
+    this.lastLoginTime = time;
   }
 
   setName(name: string) {
