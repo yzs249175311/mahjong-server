@@ -7,6 +7,7 @@ export enum ServerEventType {
   CREATE_ROOM = 'CREATE_ROOM',
   PAY_MOENY = 'PAY_MOENY',
   KICK_PLAYER = 'KICK_PLAYER',
+  SET_ROOM_CONFIG = 'SET_ROOM_CONFIG',
 }
 
 export enum ClientEventType {

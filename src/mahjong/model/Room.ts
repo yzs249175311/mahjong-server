@@ -1,7 +1,7 @@
 import { Message } from './Message';
 import { Player, PlayerInfoWithoutRoom } from './Player';
 import { RoomManager } from './RoomManager';
-export type RoomInfo = Pick<Room, 'uid' | 'name' | 'owner'> & {
+export type RoomInfo = Pick<Room, 'uid' | 'name' | 'owner' | 'config'> & {
   playerList: Array<PlayerInfoWithoutRoom>;
 } & { roomType: Pick<RoomType, 'type'> & { password: boolean } };
 
@@ -15,6 +15,10 @@ export type RoomType =
       type: 'always';
       password: string | null;
     };
+
+export type RoomConfig = {
+  hidePlayerMoney: boolean;
+};
 
 type RoomTypeValidatorType = {
   [key in RoomType['type']]: (room: Room, password?: string) => boolean;
@@ -54,7 +58,7 @@ export class Room {
   roomType: RoomType;
   playerSet: Set<Player>;
   roomManager: RoomManager;
-  messageList: Message[];
+  config: RoomConfig = { hidePlayerMoney: true };
 
   constructor(
     uid: string,
@@ -69,6 +73,10 @@ export class Room {
     this.owner = owner;
     this.playerSet = new Set();
     this.roomManager = roomManager;
+  }
+
+  setRoomConfig(config: RoomConfig) {
+    this.config = Object.assign(this.config, config);
   }
 
   hasPlayer(player: Player): boolean {
@@ -128,6 +136,7 @@ export class Room {
       roomType: { type: this.roomType.type, password: this.hasPassword() },
       playerList: this.getPlayerList(),
       owner: this.owner,
+      config: this.config,
     };
   }
 

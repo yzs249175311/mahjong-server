@@ -12,7 +12,7 @@ import { PlayerManager } from './model/PlayerManager';
 import { RoomManager } from './model/RoomManager';
 import { Socket, Server } from 'socket.io';
 import { ClientEventType, ServerEventType } from './websocket.interface';
-import { Room, RoomType } from './model/Room';
+import { Room, RoomConfig, RoomType } from './model/Room';
 import { Injectable, UsePipes } from '@nestjs/common';
 import { Player } from './model/Player';
 
@@ -160,6 +160,29 @@ export class MahjongGateway
         type: 'system',
         severity: 'warning',
         message: `你被${me.name}踢出房间!`,
+      });
+    }
+  }
+
+  // 监听： 设置房间配置
+  @SubscribeMessage(ServerEventType.SET_ROOM_CONFIG)
+  onSetRoomConfig(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() payload: RoomConfig,
+  ) {
+    let player = this.playerManager.getPlayer(socket);
+    if (
+      player &&
+      player.currentRoom &&
+      player.uid === player.currentRoom.owner
+    ) {
+      player.currentRoom.setRoomConfig(payload);
+      player.currentRoom.sendPlayerInfo();
+    } else {
+      player.sendMessage({
+        type: 'system',
+        severity: 'error',
+        message: '设置房间配置失败',
       });
     }
   }
