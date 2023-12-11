@@ -1,7 +1,7 @@
 import { Message } from './Message';
 import { Player, PlayerInfoWithoutRoom } from './Player';
 import { RoomManager } from './RoomManager';
-export type RoomInfo = Pick<Room, 'uid' | 'name'> & {
+export type RoomInfo = Pick<Room, 'uid' | 'name' | 'owner'> & {
   playerList: Array<PlayerInfoWithoutRoom>;
 } & { roomType: Pick<RoomType, 'type'> & { password: boolean } };
 
@@ -50,6 +50,7 @@ let roomTypeValidator: RoomTypeValidatorType = {
 export class Room {
   uid: string;
   name: string;
+  owner: Player['uid'];
   roomType: RoomType;
   playerSet: Set<Player>;
   roomManager: RoomManager;
@@ -60,10 +61,12 @@ export class Room {
     name: string,
     roomType: RoomType,
     roomManager: RoomManager,
+    owner: Player['uid'] = null,
   ) {
     this.uid = uid;
     this.name = name;
     this.roomType = roomType;
+    this.owner = owner;
     this.playerSet = new Set();
     this.roomManager = roomManager;
   }
@@ -98,6 +101,8 @@ export class Room {
       this.playerSet.delete(player);
       if (this.playerSet.size === 0) {
         this.destroy();
+      } else if (this.roomType.type !== 'always') {
+        this.owner = this.playerSet.values().next().value.uid;
       }
     }
   }
@@ -122,6 +127,7 @@ export class Room {
       name: this.name,
       roomType: { type: this.roomType.type, password: this.hasPassword() },
       playerList: this.getPlayerList(),
+      owner: this.owner,
     };
   }
 

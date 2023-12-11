@@ -112,9 +112,16 @@ export class MahjongGateway
       roomType: RoomType;
     },
   ) {
-    let room = this.roomManager.createRoom(payload.name, payload.roomType);
-    if (room) {
-      this.playerManager.getPlayer(socket)?.joinRoom(room, null, true);
+    let player = this.playerManager.getPlayer(socket);
+    if (player) {
+      let room = this.roomManager.createRoom(
+        payload.name,
+        payload.roomType,
+        player.uid,
+      );
+      if (room) {
+        this.playerManager.getPlayer(socket)?.joinRoom(room, null, true);
+      }
     }
   }
 

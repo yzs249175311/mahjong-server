@@ -68,6 +68,7 @@ export class PlayerManager {
         .duration(moment().diff(player.lastLoginTime))
         .asDays();
       if (duration >= 1) {
+        player.leaveRoom()
         this.deletePlayer(player);
       }
     }
