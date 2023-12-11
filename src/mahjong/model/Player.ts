@@ -4,6 +4,7 @@ import { mock } from 'mockjs';
 import { ClientEventType } from '../websocket.interface';
 import { RoomListType } from './RoomManager';
 import { Message } from './Message';
+import moment from 'moment';
 
 export type PlayerInfo = PlayerInfoWithoutRoom & {
   currentRoom: null | RoomInfo;
@@ -131,7 +132,12 @@ export class Player {
   }
 
   sendMessage(message: Message) {
-    this.messageList.push(message);
+    let msg: Message = {
+      ...message,
+      time: moment().format('HH:mm:ss'),
+    } as Message;
+
+    this.messageList.push(msg);
     this.client.emit(ClientEventType.MESSAGE, message);
   }
 
