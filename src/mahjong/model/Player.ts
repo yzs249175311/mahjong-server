@@ -78,7 +78,8 @@ export class Player {
 
     this.money -= money;
     player.getMoney(this, money);
-    let message = this.sendMessage({
+
+    this.sendMessage({
       type: 'pay',
       severity: 'success',
       from: {
@@ -139,6 +140,7 @@ export class Player {
 
     this.messageList.push(msg);
     this.client.emit(ClientEventType.MESSAGE, message);
+    this.sendPlayerInfo();
   }
 
   sendPlayerInfo() {
